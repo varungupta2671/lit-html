@@ -1,0 +1,64 @@
+<div id="customNode"></div>
+
+<script type="module">
+    import { html, render } from './node_modules/lit-html/lit-html.js';
+
+    const clickHandler = {
+        // handleEvent method is required.
+        handleEvent(e) {
+            console.log('clicked!');
+        },
+        // event listener objects can also define zero or more of the event 
+        // listener options: capture, passive, and once.
+        capture: true,
+    };
+
+    // static text template
+    const myHeader = html`<h2>Header</h2>`;
+
+    // dynamic text template
+    const helloTemplate = (name) => html`<p>Hello ${name}</p>`;
+
+    // set the class attribute
+    const classTemplate = (data) => html`<div class=${data.cssClass}>class text.</div>`;
+
+    // set the boolean attribute
+    const attrTemplate = (data) => html`<div ?disabled=${!data.active}>attr text.</div>`;
+
+    // repeate template
+    const arrTemplate = (data) => html`
+        <ul>
+            ${data.items.map((item) => html`<li>${item}</li>`)}
+        </ul>
+    `;
+
+    // add event listner
+    const btnTemplate = () => html`<button @click=${clickHandler}>Click Me!</button>`;
+
+    // repeating templates with the repeat directive
+    // const employeeList = (employees) => html`
+    //     <ul>
+    //         ${repeat(employees, (employee) => employee.id, (employee, index) => html`
+    //         <li>${index}: ${employee.familyName}, ${employee.givenName}</li>
+    //         `)}
+    //     </ul>
+    // `;
+    // ${employeeList({id: 1, familyName: 'Gupta', givenName: 'Varun'})}
+
+    // nested templates
+    const myPage = html`
+        ${myHeader}
+        ${helloTemplate('people')}
+        ${classTemplate({ cssClass: 'test' })}
+        ${attrTemplate({ active: false })}
+        ${arrTemplate({ items: ['1', '2', '3', '4'] })}
+        ${btnTemplate()}
+        <div>Here's my main page.</div>
+    `;
+
+    const customNode = document.getElementById('customNode');
+
+    // render(myPage, document.body);
+    // render to a custom node
+    render(myPage, customNode);
+</script>
