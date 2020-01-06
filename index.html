@@ -2,10 +2,14 @@
 
 <script type="module">
     import { html, render, nothing } from './node_modules/lit-html/lit-html.js';
+    import { styleMap } from './node_modules/lit-html/directives/style-map.js';
 
     const user = { isAdmin: null };
     const detailView = (data) => html`<div>..${data.showDetails}</div>`;
     const summaryView = (data) => html`<div>${data.showDetails}..</div>`;
+    const normalStyles = {};
+    const highlightStyles = { color: 'white', backgroundColor: 'red' };
+    let highlight = true;
 
     const clickHandler = {
         // handleEvent method is required.
@@ -53,6 +57,14 @@
         : summaryView(data)
     )}`;
 
+    // style map template
+    const styleMapTemp = () =>
+    html`
+        <div style=${styleMap(highlight ? highlightStyles : normalStyles)}>
+        Hi there!
+        </div>
+    `;
+
     // nested templates
     const myPage = html`
         ${myHeader}
@@ -62,6 +74,7 @@
         ${arrTemp({ items: ['1', '2', '3', '4'] })}
         ${btnTemp()}
         ${nothingTemp}
+        ${styleMapTemp()}
         <div>Here's my main page.</div>
     `;
     // ${cacheTemp({ showDetails: "hello" })}
