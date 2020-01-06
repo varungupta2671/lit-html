@@ -21,23 +21,23 @@
     const myHeader = html`<h2>Header</h2>`;
 
     // dynamic text template
-    const helloTemplate = (name) => html`<p>Hello ${name}</p>`;
+    const helloTemp = (name) => html`<p>Hello ${name}</p>`;
 
     // set the class attribute
-    const classTemplate = (data) => html`<div class=${data.cssClass}>class text.</div>`;
+    const classTemp = (data) => html`<div class=${data.cssClass}>class text.</div>`;
 
     // set the boolean attribute
-    const attrTemplate = (data) => html`<div ?disabled=${!data.active}>attr text.</div>`;
+    const attrTemp = (data) => html`<div ?disabled=${!data.active}>attr text.</div>`;
 
     // repeate template
-    const arrTemplate = (data) => html`
+    const arrTemp = (data) => html`
         <ul>
             ${data.items.map((item) => html`<li>${item}</li>`)}
         </ul>
     `;
 
     // add event listner
-    const btnTemplate = () => html`<button @click=${clickHandler}>Click Me!</button>`;
+    const btnTemp = () => html`<button @click=${clickHandler}>Click Me!</button>`;
 
     // nothing template
     const nothingTemp = html`
@@ -56,11 +56,11 @@
     // nested templates
     const myPage = html`
         ${myHeader}
-        ${helloTemplate('people')}
-        ${classTemplate({ cssClass: 'test' })}
-        ${attrTemplate({ active: false })}
-        ${arrTemplate({ items: ['1', '2', '3', '4'] })}
-        ${btnTemplate()}
+        ${helloTemp('people')}
+        ${classTemp({ cssClass: 'test' })}
+        ${attrTemp({ active: false })}
+        ${arrTemp({ items: ['1', '2', '3', '4'] })}
+        ${btnTemp()}
         ${nothingTemp}
         <div>Here's my main page.</div>
     `;
