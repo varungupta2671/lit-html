@@ -1,7 +1,10 @@
 <div id="customNode"></div>
+<div id="directiveNode"></div>
+<div id="directiveTwoNode"></div>
+<div id="directiveThreeNode"></div>
 
 <script type="module">
-    import { html, render, nothing } from './node_modules/lit-html/lit-html.js';
+    import { html, render, nothing, directive } from './node_modules/lit-html/lit-html.js';
     import { cache } from './node_modules/lit-html/directives/cache.js';
     import { styleMap } from './node_modules/lit-html/directives/style-map.js';
     import { classMap } from './node_modules/lit-html/directives/class-map.js';
@@ -87,11 +90,70 @@
         ${cacheTemp({ showDetails: "hello" })}
         ${styleMapTemp()}
         ${classMapTemp({ active: true })}
-        <div>..--..--..</div>
+        <div>..------..</div>
     `;
 
     const customNode = document.getElementById('customNode');
-    // render(myPage, document.body);
     // render to a custom node
     render(myPage, customNode);
+
+    /*
+    // Directive templates
+    ----------------------
+    The returned function is called each time the part is rendered.
+    The part argument is a Part object with an API for directly 
+    managing the dynamic DOM associated with expressions.
+    Each type of binding has its own specific Part object:
+
+        - `NodePart` for content bindings.
+        - `AttributePart` for standard attribute bindings.
+        - `BooleanAttributePart` for boolean attribute bindings.
+        - `EventPart` for event bindings.
+        - `PropertyPart` for property bindings.
+
+    Each of these part types implement a common API:
+
+        - `value`.Holds the current value of the part.
+        - `setValue`.Sets the pending value of the part.
+        - `commit`.Writes the pending value to the DOM.
+        In most cases this happens automatically—this 
+        method is only required for advanced use cases, 
+        like asynchronous directives.See Asynchronous 
+        directives for more information.
+    */
+
+    // directives
+    const helloDirective = directive(() => (part) => { part.setValue('Hello directive!') });
+
+    const safe = directive((f) => (part) => {
+        try {
+            part.setValue(f());
+        } catch (e) {
+            console.error(e);
+        }
+    });
+
+    const renderCounter = directive((initialValue) => (part) =>
+        part.setValue(part.value === undefined
+            ? initialValue
+            : part.value + 1)
+    );
+
+    // templates
+    const directiveTemp = html`<div>${helloDirective()}</div>`;
+
+    const directiveTwoTemp = (data) => html`foo = ${safe(() => data.foo)}`;
+
+    const directiveThreeTemp = () => html`
+    <div>
+        ${renderCounter(0)}
+    </div>`;
+
+    // rendering
+    const directiveNode = document.getElementById('directiveNode');
+    const directiveTwoNode = document.getElementById('directiveTwoNode');
+    const directiveThreeNode = document.getElementById('directiveThreeNode');
+    render(directiveTemp, directiveNode);
+    render(directiveTwoTemp({foo: 30}), directiveTwoNode);
+    render(directiveThreeTemp(), directiveThreeNode);
 </script>
