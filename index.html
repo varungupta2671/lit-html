@@ -2,7 +2,9 @@
 
 <script type="module">
     import { html, render, nothing } from './node_modules/lit-html/lit-html.js';
+    import { cache } from './node_modules/lit-html/directives/cache.js';
     import { styleMap } from './node_modules/lit-html/directives/style-map.js';
+    import { classMap } from './node_modules/lit-html/directives/class-map.js';
 
     const user = { isAdmin: null };
     const detailView = (data) => html`<div>..${data.showDetails}</div>`;
@@ -10,6 +12,7 @@
     const normalStyles = {};
     const highlightStyles = { color: 'white', backgroundColor: 'red' };
     let highlight = true;
+    const baseClasses = { 'menu-item': true };
 
     const clickHandler = {
         // handleEvent method is required.
@@ -59,11 +62,18 @@
 
     // style map template
     const styleMapTemp = () =>
-    html`
+        html`
         <div style=${styleMap(highlight ? highlightStyles : normalStyles)}>
         Hi there!
         </div>
     `;
+
+    // class map template
+    const classMapTemp = (item) => {
+        // Merge in dynamically-generated classes
+        const mergedClasses = Object.assign({ active: item.active }, baseClasses);
+        return html`<div class=${classMap(mergedClasses)}>Classy text</div>`
+    }
 
     // nested templates
     const myPage = html`
@@ -74,10 +84,11 @@
         ${arrTemp({ items: ['1', '2', '3', '4'] })}
         ${btnTemp()}
         ${nothingTemp}
+        ${cacheTemp({ showDetails: "hello" })}
         ${styleMapTemp()}
-        <div>Here's my main page.</div>
+        ${classMapTemp({ active: true })}
+        <div>..--..--..</div>
     `;
-    // ${cacheTemp({ showDetails: "hello" })}
 
     const customNode = document.getElementById('customNode');
     // render(myPage, document.body);
