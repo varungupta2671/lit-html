@@ -9,7 +9,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "start": "http-server -a 127.0.0.1 -p 3000"
+    "start": "http-server -a 127.0.0.1 -p 3000 -o"
   },
   "author": "",
   "license": "ISC"
